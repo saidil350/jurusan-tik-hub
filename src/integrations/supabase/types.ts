@@ -44,6 +44,57 @@ export type Database = {
         }
         Relationships: []
       }
+      jadwal_dosen: {
+        Row: {
+          created_at: string
+          dosen_id: string
+          hari: string
+          id: string
+          jam_mulai: string
+          jam_selesai: string
+          mata_kuliah: string
+          ruang_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dosen_id: string
+          hari: string
+          id?: string
+          jam_mulai: string
+          jam_selesai: string
+          mata_kuliah: string
+          ruang_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dosen_id?: string
+          hari?: string
+          id?: string
+          jam_mulai?: string
+          jam_selesai?: string
+          mata_kuliah?: string
+          ruang_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jadwal_dosen_dosen_id_fkey"
+            columns: ["dosen_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jadwal_dosen_ruang_id_fkey"
+            columns: ["ruang_id"]
+            isOneToOne: false
+            referencedRelation: "ruang"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peminjaman: {
         Row: {
           catatan_admin: string | null

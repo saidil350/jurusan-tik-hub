@@ -10,11 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { CalendarIcon, Send } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Send, Search, User } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface Ruang {
   id: string;
@@ -30,6 +27,19 @@ interface Infokus {
   status: string;
 }
 
+interface JadwalDosen {
+  id: string;
+  dosen_id: string;
+  hari: string;
+  jam_mulai: string;
+  jam_selesai: string;
+  mata_kuliah: string;
+  profiles: {
+    full_name: string;
+    nim_nip: string;
+  };
+}
+
 export default function Peminjaman() {
   const { user, profile, loading } = useAuth();
   const navigate = useNavigate();
@@ -37,12 +47,13 @@ export default function Peminjaman() {
   const [jenisBarang, setJenisBarang] = useState<'kunci_ruang' | 'infokus' | ''>('');
   const [itemId, setItemId] = useState('');
   const [keperluan, setKeperluan] = useState('');
-  const [tanggalPinjam, setTanggalPinjam] = useState<Date>();
+  const [hari, setHari] = useState('');
   const [jamPinjam, setJamPinjam] = useState('');
-  const [tanggalKembali, setTanggalKembali] = useState<Date>();
   const [jamKembali, setJamKembali] = useState('');
   const [ruangList, setRuangList] = useState<Ruang[]>([]);
   const [infokusList, setInfokusList] = useState<Infokus[]>([]);
+  const [dosenList, setDosenList] = useState<JadwalDosen[]>([]);
+  const [loadingDosen, setLoadingDosen] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -79,30 +90,75 @@ export default function Peminjaman() {
     }
   };
 
+  const cariDosen = async () => {
+    if (!hari || !jamPinjam || !jamKembali) {
+      toast.error('Pilih hari dan jam terlebih dahulu');
+      return;
+    }
+
+    if (jamKembali <= jamPinjam) {
+      toast.error('Jam kembali harus lebih dari jam pinjam');
+      return;
+    }
+
+    setLoadingDosen(true);
+    try {
+      const { data, error } = await supabase
+        .from('jadwal_dosen')
+        .select(`
+          *,
+          profiles:dosen_id (
+            full_name,
+            nim_nip
+          )
+        `)
+        .eq('hari', hari)
+        .gte('jam_selesai', jamPinjam)
+        .lte('jam_mulai', jamKembali);
+
+      if (error) throw error;
+      setDosenList(data || []);
+
+      if (data && data.length === 0) {
+        toast.info('Tidak ada dosen yang mengajar pada waktu tersebut');
+      } else {
+        toast.success(`Ditemukan ${data?.length || 0} dosen yang mengajar`);
+      }
+    } catch (error) {
+      console.error('Error fetching dosen:', error);
+      toast.error('Gagal mencari data dosen');
+    } finally {
+      setLoadingDosen(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!jenisBarang || !itemId || !keperluan || !tanggalPinjam || !jamPinjam || !tanggalKembali || !jamKembali) {
+    if (!jenisBarang || !itemId || !keperluan || !jamPinjam || !jamKembali) {
       toast.error('Semua field wajib diisi');
       return;
     }
 
-    const waktuPinjam = new Date(tanggalPinjam);
-    const [hourPinjam, minutePinjam] = jamPinjam.split(':');
-    waktuPinjam.setHours(parseInt(hourPinjam), parseInt(minutePinjam), 0, 0);
-
-    const waktuKembali = new Date(tanggalKembali);
-    const [hourKembali, minuteKembali] = jamKembali.split(':');
-    waktuKembali.setHours(parseInt(hourKembali), parseInt(minuteKembali), 0, 0);
-
-    if (waktuKembali <= waktuPinjam) {
-      toast.error('Waktu kembali harus lebih dari waktu pinjam');
+    if (jamKembali <= jamPinjam) {
+      toast.error('Jam kembali harus lebih dari jam pinjam');
       return;
     }
 
     setSubmitting(true);
 
     try {
+      // Use today's date with selected times
+      const today = new Date();
+      
+      const waktuPinjam = new Date(today);
+      const [hourPinjam, minutePinjam] = jamPinjam.split(':');
+      waktuPinjam.setHours(parseInt(hourPinjam), parseInt(minutePinjam), 0, 0);
+
+      const waktuKembali = new Date(today);
+      const [hourKembali, minuteKembali] = jamKembali.split(':');
+      waktuKembali.setHours(parseInt(hourKembali), parseInt(minuteKembali), 0, 0);
+
       const { error } = await supabase.from('peminjaman').insert({
         user_id: user?.id,
         jenis_barang: jenisBarang,
@@ -224,36 +280,29 @@ export default function Peminjaman() {
                 />
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Tanggal Pinjam *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !tanggalPinjam && 'text-muted-foreground'
-                        )}
-                        disabled={submitting}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {tanggalPinjam ? format(tanggalPinjam, 'PPP') : 'Pilih tanggal'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={tanggalPinjam}
-                        onSelect={setTanggalPinjam}
-                        disabled={(date) => date < new Date()}
-                        initialFocus
-                        className={cn('p-3 pointer-events-auto')}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="hari">Hari *</Label>
+                <Select
+                  value={hari}
+                  onValueChange={setHari}
+                  disabled={submitting}
+                >
+                  <SelectTrigger id="hari">
+                    <SelectValue placeholder="Pilih hari" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Senin">Senin</SelectItem>
+                    <SelectItem value="Selasa">Selasa</SelectItem>
+                    <SelectItem value="Rabu">Rabu</SelectItem>
+                    <SelectItem value="Kamis">Kamis</SelectItem>
+                    <SelectItem value="Jumat">Jumat</SelectItem>
+                    <SelectItem value="Sabtu">Sabtu</SelectItem>
+                    <SelectItem value="Minggu">Minggu</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="jamPinjam">Jam Pinjam *</Label>
                   <Input
@@ -263,37 +312,6 @@ export default function Peminjaman() {
                     onChange={(e) => setJamPinjam(e.target.value)}
                     disabled={submitting}
                   />
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Tanggal Kembali *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !tanggalKembali && 'text-muted-foreground'
-                        )}
-                        disabled={submitting}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {tanggalKembali ? format(tanggalKembali, 'PPP') : 'Pilih tanggal'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={tanggalKembali}
-                        onSelect={setTanggalKembali}
-                        disabled={(date) => date < new Date()}
-                        initialFocus
-                        className={cn('p-3 pointer-events-auto')}
-                      />
-                    </PopoverContent>
-                  </Popover>
                 </div>
 
                 <div className="space-y-2">
@@ -307,6 +325,57 @@ export default function Peminjaman() {
                   />
                 </div>
               </div>
+
+              {/* Search Dosen Button */}
+              <div className="flex justify-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={cariDosen}
+                  disabled={!hari || !jamPinjam || !jamKembali || loadingDosen}
+                >
+                  <Search className="mr-2 h-4 w-4" />
+                  {loadingDosen ? 'Mencari...' : 'Cari Dosen yang Mengajar'}
+                </Button>
+              </div>
+
+              {/* Dosen List Display */}
+              {dosenList.length > 0 && (
+                <Card className="bg-muted/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base">Dosen yang Mengajar</CardTitle>
+                    <CardDescription>
+                      Dosen yang mengajar pada {hari}, {jamPinjam} - {jamKembali}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {dosenList.map((jadwal) => (
+                        <div
+                          key={jadwal.id}
+                          className="flex items-center justify-between p-3 bg-background rounded-lg border"
+                        >
+                          <div className="flex items-start gap-3">
+                            <User className="h-5 w-5 text-muted-foreground mt-0.5" />
+                            <div>
+                              <p className="font-medium">{jadwal.profiles.full_name}</p>
+                              <p className="text-sm text-muted-foreground">
+                                NIP: {jadwal.profiles.nim_nip}
+                              </p>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {jadwal.mata_kuliah}
+                              </p>
+                            </div>
+                          </div>
+                          <Badge variant="secondary">
+                            {jadwal.jam_mulai.slice(0, 5)} - {jadwal.jam_selesai.slice(0, 5)}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               <div className="flex gap-4">
                 <Button
