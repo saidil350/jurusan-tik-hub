@@ -9,55 +9,54 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary-hover">
-              <span className="text-lg font-bold text-primary-foreground">TIK</span>
+        <div className="flex h-14 items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+              <span className="text-sm font-bold text-primary-foreground">TIK</span>
             </div>
-            <span className="hidden font-semibold sm:inline-block">
-              Sistem Pelayanan Jurusan TIK
+            <span className="hidden font-semibold text-sm sm:inline-block">
+              Pelayanan Jurusan TIK
             </span>
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex md:items-center md:space-x-4">
+          <div className="hidden md:flex md:items-center md:gap-1">
             {user ? (
               <>
-                <Button variant="ghost" asChild>
+                <Button variant="ghost" size="sm" asChild>
                   <Link to="/dashboard">
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Dashboard
                   </Link>
                 </Button>
-                <Button variant="ghost" asChild>
-                  <Link to="/peminjaman">Peminjaman Baru</Link>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/peminjaman">Peminjaman</Link>
                 </Button>
-                <Button variant="ghost" asChild>
+                <Button variant="ghost" size="sm" asChild>
                   <Link to="/riwayat">Riwayat</Link>
                 </Button>
                 {profile?.role === 'admin' && (
-                  <Button variant="ghost" asChild>
-                    <Link to="/dashboard/admin">Admin Panel</Link>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/dashboard/admin">Admin</Link>
                   </Button>
                 )}
-                <div className="flex items-center space-x-2 border-l pl-4">
-                  <span className="text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 ml-2 pl-2 border-l">
+                  <span className="text-xs text-muted-foreground">
                     {profile?.full_name}
                   </span>
-                  <Button variant="outline" size="sm" onClick={signOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                  <Button variant="ghost" size="sm" onClick={signOut}>
+                    <LogOut className="h-4 w-4" />
                   </Button>
                 </div>
               </>
             ) : (
               <>
-                <Button variant="ghost" asChild>
+                <Button variant="ghost" size="sm" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button asChild>
+                <Button size="sm" asChild>
                   <Link to="/register">Daftar</Link>
                 </Button>
               </>

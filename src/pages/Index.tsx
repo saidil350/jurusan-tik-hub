@@ -53,26 +53,31 @@ export default function Index() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-hover py-20 sm:py-32">
-        <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]" />
-        <div className="container relative mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-white sm:text-6xl">
+      <section className="relative py-24 sm:py-32">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl text-center space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm">
+              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <span className="text-muted-foreground">Sistem Pelayanan Digital</span>
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
               Sistem Pelayanan
               <br />
-              <span className="text-accent">Jurusan TIK</span>
+              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                Jurusan TIK
+              </span>
             </h1>
-            <p className="mb-8 text-lg text-blue-50 sm:text-xl">
+            <p className="text-lg text-muted-foreground">
               Platform terintegrasi untuk peminjaman kunci ruang dan infokus/proyektor
               secara efisien dan terorganisir
             </p>
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent-hover text-white">
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center pt-4">
+              <Button size="lg" asChild>
                 <Link to="/register">
                   Daftar Sekarang
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="bg-white/10 text-white border-white/20 hover:bg-white/20">
+              <Button size="lg" variant="outline" asChild>
                 <Link to="/login">
                   Login
                 </Link>
@@ -83,25 +88,25 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+          <div className="mb-12 text-center space-y-3">
+            <h2 className="text-3xl font-bold tracking-tight">
               Fitur Layanan
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-muted-foreground">
               Kemudahan dalam satu sistem terintegrasi
             </p>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature, index) => (
-              <Card key={index} className="transition-all hover:shadow-lg border-2 hover:border-primary/20">
-                <CardHeader>
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <feature.icon className="h-6 w-6 text-primary" />
+              <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow">
+                <CardHeader className="space-y-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                    <feature.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  <CardDescription className="text-base">
+                  <CardTitle className="text-base font-semibold">{feature.title}</CardTitle>
+                  <CardDescription className="text-sm">
                     {feature.description}
                   </CardDescription>
                 </CardHeader>
@@ -112,24 +117,24 @@ export default function Index() {
       </section>
 
       {/* Rules Section */}
-      <section className="bg-muted/50 py-20">
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl">
-            <div className="mb-12 text-center">
-              <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+          <div className="mx-auto max-w-2xl">
+            <div className="mb-8 text-center space-y-3">
+              <h2 className="text-3xl font-bold tracking-tight">
                 Aturan Peminjaman
               </h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-muted-foreground">
                 Harap patuhi ketentuan berikut untuk kelancaran layanan
               </p>
             </div>
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardContent className="pt-6">
-                <ul className="space-y-4">
+                <ul className="space-y-3">
                   {rules.map((rule, index) => (
-                    <li key={index} className="flex gap-3">
-                      <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                      <span className="text-foreground">{rule}</span>
+                    <li key={index} className="flex gap-3 text-sm">
+                      <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                      <span>{rule}</span>
                     </li>
                   ))}
                 </ul>
@@ -140,16 +145,18 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+          <Card className="border-0 shadow-sm bg-gradient-to-br from-primary/5 to-primary/10">
             <CardContent className="flex flex-col items-center gap-6 p-12 text-center">
-              <Users className="h-16 w-16 text-primary" />
-              <div>
-                <h2 className="mb-4 text-3xl font-bold">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Users className="h-6 w-6 text-primary" />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold">
                   Siap Memulai?
                 </h2>
-                <p className="mb-6 text-lg text-muted-foreground">
+                <p className="text-muted-foreground">
                   Daftar sekarang dan nikmati kemudahan layanan peminjaman
                 </p>
               </div>

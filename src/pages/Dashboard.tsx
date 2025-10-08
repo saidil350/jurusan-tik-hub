@@ -102,54 +102,54 @@ export default function Dashboard() {
       
       <main className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            Selamat Datang, {profile.full_name}!
+        <div className="mb-8 space-y-1">
+          <h1 className="text-2xl font-bold">
+            Selamat Datang, {profile.full_name}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {profile.role === 'mahasiswa' ? 'NIM' : 'NIP'}: {profile.nim_nip}
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>Total Peminjaman</CardDescription>
-              <CardTitle className="text-4xl">{stats.total}</CardTitle>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Total Peminjaman</CardDescription>
+              <CardTitle className="text-3xl font-bold">{stats.total}</CardTitle>
             </CardHeader>
           </Card>
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>Menunggu Persetujuan</CardDescription>
-              <CardTitle className="text-4xl text-yellow-600">{stats.pending}</CardTitle>
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Menunggu</CardDescription>
+              <CardTitle className="text-3xl font-bold text-yellow-600">{stats.pending}</CardTitle>
             </CardHeader>
           </Card>
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>Disetujui</CardDescription>
-              <CardTitle className="text-4xl text-green-600">{stats.disetujui}</CardTitle>
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Disetujui</CardDescription>
+              <CardTitle className="text-3xl font-bold text-green-600">{stats.disetujui}</CardTitle>
             </CardHeader>
           </Card>
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>Peminjaman Aktif</CardDescription>
-              <CardTitle className="text-4xl text-primary">{stats.aktif}</CardTitle>
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Aktif</CardDescription>
+              <CardTitle className="text-3xl font-bold text-primary">{stats.aktif}</CardTitle>
             </CardHeader>
           </Card>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid gap-6 md:grid-cols-2 mb-8">
-          <Card className="border-2 border-primary/20 hover:border-primary/40 transition-colors">
-            <CardHeader>
-              <CardTitle>Peminjaman Baru</CardTitle>
-              <CardDescription>
+        <div className="grid gap-4 md:grid-cols-2 mb-8">
+          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Peminjaman Baru</CardTitle>
+              <CardDescription className="text-sm">
                 Ajukan peminjaman kunci ruang atau infokus
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild className="w-full">
+              <Button asChild className="w-full" size="sm">
                 <Link to="/peminjaman">
                   <Plus className="mr-2 h-4 w-4" />
                   Buat Peminjaman
@@ -158,15 +158,15 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="border-2 border-muted hover:border-muted-foreground/20 transition-colors">
-            <CardHeader>
-              <CardTitle>Riwayat Peminjaman</CardTitle>
-              <CardDescription>
+          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Riwayat Peminjaman</CardTitle>
+              <CardDescription className="text-sm">
                 Lihat semua riwayat peminjaman Anda
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild variant="outline" className="w-full">
+              <Button asChild variant="outline" className="w-full" size="sm">
                 <Link to="/riwayat">
                   Lihat Riwayat
                 </Link>
@@ -176,10 +176,10 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Peminjaman */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Peminjaman Terbaru</CardTitle>
-            <CardDescription>
+        <Card className="border-0 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base">Peminjaman Terbaru</CardTitle>
+            <CardDescription className="text-sm">
               5 peminjaman terakhir Anda
             </CardDescription>
           </CardHeader>
@@ -204,24 +204,23 @@ export default function Dashboard() {
                 {peminjaman.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex items-start justify-between p-3 border rounded-md hover:bg-accent/50 transition-colors"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium">
+                        <p className="text-sm font-medium">
                           {item.jenis_barang === 'kunci_ruang' ? 'Kunci Ruang' : 'Infokus/Proyektor'}
                         </p>
                         {getStatusBadge(item.status)}
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         {item.keperluan}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(item.waktu_pinjam).toLocaleDateString('id-ID', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
+                          weekday: 'short',
                           day: 'numeric',
+                          month: 'short',
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
