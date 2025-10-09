@@ -145,6 +145,30 @@ export type Database = {
           },
         ]
       }
+      profile_access_log: {
+        Row: {
+          access_time: string
+          access_type: string
+          accessed_by_user_id: string
+          accessed_profile_id: string
+          id: string
+        }
+        Insert: {
+          access_time?: string
+          access_type: string
+          accessed_by_user_id: string
+          accessed_profile_id: string
+          id?: string
+        }
+        Update: {
+          access_time?: string
+          access_type?: string
+          accessed_by_user_id?: string
+          accessed_profile_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -231,6 +255,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_profiles_rls_enabled: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["user_role"]
