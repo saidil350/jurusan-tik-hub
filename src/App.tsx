@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import Peminjaman from "./pages/Peminjaman";
 import Riwayat from "./pages/Riwayat";
+import ExportDatabase from "./pages/ExportDatabase";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/dashboard/admin" element={<DashboardAdmin />} />
             <Route path="/peminjaman" element={<Peminjaman />} />
             <Route path="/riwayat" element={<Riwayat />} />
+            <Route path="/export-database" element={<ExportDatabase />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
