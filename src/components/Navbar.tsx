@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogOut, Menu, X, LayoutDashboard } from 'lucide-react';
+import { LogOut, Menu, X, LayoutDashboard, Database } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -38,9 +38,17 @@ export default function Navbar() {
                   <Link to="/riwayat">Riwayat</Link>
                 </Button>
                 {profile?.role === 'admin' && (
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link to="/dashboard/admin">Admin</Link>
-                  </Button>
+                  <>
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link to="/dashboard/admin">Admin</Link>
+                    </Button>
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link to="/export-database">
+                        <Database className="mr-2 h-4 w-4" />
+                        Export DB
+                      </Link>
+                    </Button>
+                  </>
                 )}
                 <div className="flex items-center gap-2 ml-2 pl-2 border-l">
                   <span className="text-xs text-muted-foreground">
@@ -94,11 +102,19 @@ export default function Navbar() {
                   </Link>
                 </Button>
                 {profile?.role === 'admin' && (
-                  <Button variant="ghost" asChild className="justify-start">
-                    <Link to="/dashboard/admin" onClick={() => setMobileMenuOpen(false)}>
-                      Admin Panel
-                    </Link>
-                  </Button>
+                  <>
+                    <Button variant="ghost" asChild className="justify-start">
+                      <Link to="/dashboard/admin" onClick={() => setMobileMenuOpen(false)}>
+                        Admin Panel
+                      </Link>
+                    </Button>
+                    <Button variant="ghost" asChild className="justify-start">
+                      <Link to="/export-database" onClick={() => setMobileMenuOpen(false)}>
+                        <Database className="mr-2 h-4 w-4" />
+                        Export Database
+                      </Link>
+                    </Button>
+                  </>
                 )}
                 <div className="pt-2 border-t">
                   <p className="text-sm text-muted-foreground mb-2 px-4">
