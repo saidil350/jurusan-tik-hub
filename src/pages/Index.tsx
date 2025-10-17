@@ -52,6 +52,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background relative">
       <BackgroundParticles />
+      <div className="relative z-10">
       <Navbar />
       
       {/* Hero Section */}
@@ -178,6 +179,7 @@ export default function Index() {
           <p>© 2025 Sistem Pelayanan Jurusan TIK. All rights reserved.</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

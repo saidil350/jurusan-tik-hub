@@ -2,44 +2,59 @@ import { Key, Projector } from 'lucide-react';
 
 export default function BackgroundParticles() {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/10" />
-      
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      {/* Enhanced Gradient Background with semantic tokens */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(1200px 600px at 80% 10%, hsl(var(--primary) / 0.18), transparent 60%),\n             radial-gradient(900px 500px at 10% 85%, hsl(var(--accent) / 0.22), transparent 55%)',
+        }}
+      />
+
       {/* Animated Particles - Keys */}
-      <div className="absolute top-[10%] left-[15%] animate-float-slow opacity-20">
-        <Key className="h-8 w-8 text-primary rotate-45" />
+      <div className="absolute top-[10%] left-[15%] animate-float-slow opacity-40">
+        <Key className="h-10 w-10 text-primary rotate-45" />
       </div>
-      <div className="absolute top-[70%] left-[10%] animate-float-delayed opacity-15">
-        <Key className="h-6 w-6 text-primary/60 -rotate-12" />
+      <div className="absolute top-[70%] left-[12%] animate-float-delayed opacity-35">
+        <Key className="h-7 w-7 text-primary/80 -rotate-12" />
       </div>
-      <div className="absolute top-[30%] right-[20%] animate-float opacity-25">
-        <Key className="h-10 w-10 text-primary/70 rotate-12" />
+      <div className="absolute top-[32%] right-[18%] animate-float opacity-45">
+        <Key className="h-12 w-12 text-primary/90 rotate-12" />
       </div>
-      <div className="absolute bottom-[20%] right-[15%] animate-float-slow opacity-20">
-        <Key className="h-7 w-7 text-primary rotate-90" />
+      <div className="absolute bottom-[18%] right-[14%] animate-float-slow opacity-40">
+        <Key className="h-8 w-8 text-primary rotate-90" />
       </div>
       
       {/* Animated Particles - Projectors */}
-      <div className="absolute top-[50%] left-[5%] animate-float-delayed opacity-20">
-        <Projector className="h-9 w-9 text-accent-foreground/30" />
+      <div className="absolute top-[52%] left-[6%] animate-float-delayed opacity-40">
+        <Projector className="h-11 w-11 text-accent-foreground/50" />
       </div>
-      <div className="absolute top-[15%] right-[10%] animate-float-slow opacity-25">
-        <Projector className="h-8 w-8 text-accent-foreground/40 rotate-12" />
+      <div className="absolute top-[14%] right-[12%] animate-float-slow opacity-45">
+        <Projector className="h-10 w-10 text-accent-foreground/60 rotate-12" />
       </div>
-      <div className="absolute bottom-[30%] left-[25%] animate-float opacity-15">
-        <Projector className="h-7 w-7 text-accent-foreground/30 -rotate-6" />
+      <div className="absolute bottom-[32%] left-[26%] animate-float opacity-35">
+        <Projector className="h-9 w-9 text-accent-foreground/50 -rotate-6" />
       </div>
-      <div className="absolute bottom-[15%] right-[30%] animate-float-delayed opacity-20">
-        <Projector className="h-10 w-10 text-accent-foreground/35 rotate-45" />
+      <div className="absolute bottom-[12%] right-[28%] animate-float-delayed opacity-40">
+        <Projector className="h-12 w-12 text-accent-foreground/55 rotate-45" />
       </div>
 
-      {/* Decorative Circles */}
-      <div className="absolute top-[20%] left-[40%] w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse-slow" />
-      <div className="absolute bottom-[20%] right-[40%] w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-pulse-slower" />
+      {/* Soft glow orbs */}
+      <div className="absolute top-[22%] left-[42%] w-72 h-72 bg-primary/15 rounded-full blur-3xl animate-pulse-slow" />
+      <div className="absolute bottom-[18%] right-[42%] w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse-slower" />
       
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+      {/* Grid Pattern with higher visibility */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.06]" />
+
+      {/* Small twinkle particles */}
+      <span className="absolute top-[8%] left-[35%] w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse-slow" />
+      <span className="absolute top-[28%] left-[8%] w-1 h-1 rounded-full bg-primary/40 animate-pulse-slower" />
+      <span className="absolute top-[58%] left-[48%] w-1.5 h-1.5 rounded-full bg-accent-foreground/30 animate-pulse-slow" />
+      <span className="absolute top-[76%] left-[22%] w-1 h-1 rounded-full bg-primary/40 animate-pulse-slower" />
+      <span className="absolute top-[18%] right-[28%] w-1.5 h-1.5 rounded-full bg-accent-foreground/30 animate-pulse-slow" />
+      <span className="absolute bottom-[28%] right-[12%] w-1 h-1 rounded-full bg-primary/40 animate-pulse-slower" />
     </div>
   );
 }
+
